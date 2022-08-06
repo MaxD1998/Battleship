@@ -1,33 +1,53 @@
-﻿using Core.Dtos.AbstractDtos;
+﻿using Core.Constants;
+using Core.Dtos.AbstractDtos;
+using Core.Dtos.Position;
+using Core.Dtos.Ship;
 using Core.Factories.AbstractFactories;
+using Core.Interfaces.Services;
 
 namespace Core.Factories.ConrateFactories
 {
     public class ShipFactory : IShipFactory
     {
-        public IShipDto CreateBattleshipDto()
+        private readonly IRandomPositionGeneratorService _rpgService;
+
+        public ShipFactory(IRandomPositionGeneratorService rpgService)
         {
-            throw new NotImplementedException();
+            _rpgService = rpgService;
         }
 
-        public IShipDto CreateCarrierDto()
-        {
-            throw new NotImplementedException();
-        }
+        public IShipDto CreateBattleshipDto() =>
+            CreateShip("Battleship", ShipSizeConst.Battleship);
 
-        public IShipDto CreateDestroyerDto()
-        {
-            throw new NotImplementedException();
-        }
+        public IShipDto CreateCarrierDto() =>
+            CreateShip("Carrier", ShipSizeConst.Carrier);
 
-        public IShipDto CreatePatrolBoatDto()
-        {
-            throw new NotImplementedException();
-        }
+        public IShipDto CreateDestroyerDto() =>
+            CreateShip("Destroyer", ShipSizeConst.Destroyer);
 
-        public IShipDto CreateSubmarineDto()
+        public IShipDto CreatePatrolBoatDto() =>
+            CreateShip("Patrol boat", ShipSizeConst.PatrolBoat);
+
+        public IShipDto CreateSubmarineDto() =>
+            CreateShip("Submarine", ShipSizeConst.Submarine);
+
+        private IShipDto CreateShip(string name, int shipSize)
         {
-            throw new NotImplementedException();
+            var result = new ShipInputDto()
+            {
+                Name = name,
+            };
+
+            for (int i = 0; i < shipSize; i++)
+            {
+                result.Positions.Add(new PositionDto()
+                {
+                    X = _rpgService.GeneratePosition(),
+                    Y = _rpgService.GeneratePosition()
+                });
+            }
+
+            return result;
         }
     }
 }

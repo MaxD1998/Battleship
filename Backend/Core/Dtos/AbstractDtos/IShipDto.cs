@@ -4,10 +4,10 @@ namespace Core.Dtos.AbstractDtos
 {
     public interface IShipDto
     {
-        bool IsSunk { get; set; }
+        bool IsSunk { get; }
 
         string Name { get; set; }
 
-        public List<PositionDto> Positions { get; set; }
+        List<PositionDto> Positions { get; set; }
     }
 }
