@@ -1,14 +1,107 @@
-﻿using Core.Interfaces.Services;
+﻿using Core.Dtos.Position;
+using Core.Interfaces.Services;
 
 namespace Core.Services
 {
     public class RandomPositionGeneratorService : IRandomPositionGeneratorService
     {
-        public int GeneratePosition()
+        private List<PositionBaseDto> _lockedPositions = new();
+
+        public List<PositionDto> GeneratePositions(int shipSize, bool autoposition)
+        {
+            var isVertical = Convert.ToBoolean(GenerateNumber(0, 1));
+            var positions = new List<PositionDto>();
+            var position = GeneratePosition(isVertical, shipSize);
+
+            if (!autoposition)
+                return positions;
+
+            positions.Add(new PositionDto()
+            {
+                X = position.X,
+                Y = position.Y,
+            });
+
+            for (int i = 1; i < shipSize; i++)
+            {
+                if (isVertical)
+                    positions.Add(new PositionDto()
+                    {
+                        X = position.X,
+                        Y = position.Y + i,
+                    });
+                else
+                    positions.Add(new PositionDto()
+                    {
+                        X = position.X + i,
+                        Y = position.Y,
+                    });
+            }
+
+            AddLockedPositions(positions);
+
+            return positions;
+        }
+
+        private void AddLockedPositions(IEnumerable<PositionBaseDto> positions)
+        {
+            foreach (var position in positions)
+            {
+                var x = position.X - 1 > 0 ? position.X - 1 : position.X;
+                var y = position.Y - 1 > 0 ? position.Y - 1 : position.Y;
+                var endX = position.X + 1 > 10 ? position.X : position.X + 1;
+                var endY = position.Y + 1 > 10 ? position.Y : position.Y + 1;
+
+                for (int i = x; i <= endX; i++)
+                {
+                    for (int j = y; j <= endY; j++)
+                    {
+                        var lockedPosition = new PositionBaseDto()
+                        {
+                            X = i,
+                            Y = j,
+                        };
+
+                        if (_lockedPositions.Contains(lockedPosition))
+                            continue;
+
+                        _lockedPositions.Add(lockedPosition);
+                    }
+                }
+            }
+        }
+
+        private PositionBaseDto CreatePosition()
+        {
+            return new PositionBaseDto()
+            {
+                X = GenerateNumber(1, 10),
+                Y = GenerateNumber(1, 10),
+            };
+        }
+
+        private int GenerateNumber(int start, int end)
         {
             var random = new Random();
 
-            return random.Next(1, 10);
+            return random.Next(start, end);
+        }
+
+        private PositionBaseDto GeneratePosition(bool isVertical, int shipSize)
+        {
+            var position = CreatePosition();
+            var decrementShipSize = shipSize - 1;
+            var endPositon = position.ShallowCopy();
+
+            if (isVertical)
+                endPositon.Y += decrementShipSize;
+            else
+                endPositon.X += decrementShipSize;
+
+            if (_lockedPositions.Contains(position) || _lockedPositions.Contains(endPositon))
+                return GeneratePosition(isVertical, shipSize);
+
+            return position;
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace Core.Interfaces.Services
+﻿using Core.Dtos.Position;
+
+namespace Core.Interfaces.Services
 {
     public interface IRandomPositionGeneratorService
     {
-        int GeneratePosition();
+        List<PositionDto> GeneratePositions(int shipSize, bool autoPosition);
     }
 }

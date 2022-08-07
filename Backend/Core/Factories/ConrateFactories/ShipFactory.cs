@@ -1,6 +1,5 @@
 ﻿using Core.Constants;
 using Core.Dtos.AbstractDtos;
-using Core.Dtos.Position;
 using Core.Dtos.Ship;
 using Core.Factories.AbstractFactories;
 using Core.Interfaces.Services;
@@ -16,36 +15,28 @@ namespace Core.Factories.ConrateFactories
             _rpgService = rpgService;
         }
 
-        public IShipDto CreateBattleshipDto() =>
-            CreateShip("Battleship", ShipSizeConst.Battleship);
+        public IShipDto CreateBattleshipDto(bool autoposition) =>
+            CreateShip("Battleship", ShipSizeConst.Battleship, autoposition);
 
-        public IShipDto CreateCarrierDto() =>
-            CreateShip("Carrier", ShipSizeConst.Carrier);
+        public IShipDto CreateCarrierDto(bool autoposition) =>
+            CreateShip("Carrier", ShipSizeConst.Carrier, autoposition);
 
-        public IShipDto CreateDestroyerDto() =>
-            CreateShip("Destroyer", ShipSizeConst.Destroyer);
+        public IShipDto CreateDestroyerDto(bool autoposition) =>
+            CreateShip("Destroyer", ShipSizeConst.Destroyer, autoposition);
 
-        public IShipDto CreatePatrolBoatDto() =>
-            CreateShip("Patrol boat", ShipSizeConst.PatrolBoat);
+        public IShipDto CreatePatrolBoatDto(bool autoposition) =>
+            CreateShip("Patrol boat", ShipSizeConst.PatrolBoat, autoposition);
 
-        public IShipDto CreateSubmarineDto() =>
-            CreateShip("Submarine", ShipSizeConst.Submarine);
+        public IShipDto CreateSubmarineDto(bool autoposition) =>
+            CreateShip("Submarine", ShipSizeConst.Submarine, autoposition);
 
-        private IShipDto CreateShip(string name, int shipSize)
+        private IShipDto CreateShip(string name, int shipSize, bool autoposition)
         {
             var result = new ShipInputDto()
             {
                 Name = name,
+                Positions = _rpgService.GeneratePositions(shipSize, autoposition)
             };
-
-            for (int i = 0; i < shipSize; i++)
-            {
-                result.Positions.Add(new PositionDto()
-                {
-                    X = _rpgService.GeneratePosition(),
-                    Y = _rpgService.GeneratePosition()
-                });
-            }
 
             return result;
         }

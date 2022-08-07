@@ -4,14 +4,14 @@ namespace Core.Factories.AbstractFactories
 {
     public interface IShipFactory
     {
-        IShipDto CreateBattleshipDto();
+        IShipDto CreateBattleshipDto(bool autoposition);
 
-        IShipDto CreateCarrierDto();
+        IShipDto CreateCarrierDto(bool autoposition);
 
-        IShipDto CreateDestroyerDto();
+        IShipDto CreateDestroyerDto(bool autoposition);
 
-        IShipDto CreatePatrolBoatDto();
+        IShipDto CreatePatrolBoatDto(bool autoposition);
 
-        IShipDto CreateSubmarineDto();
+        IShipDto CreateSubmarineDto(bool autoposition);
     }
 }
