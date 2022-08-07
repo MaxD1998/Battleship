@@ -98,7 +98,10 @@ namespace Core.Services
             else
                 endPositon.X += decrementShipSize;
 
-            if (_lockedPositions.Contains(position) || _lockedPositions.Contains(endPositon))
+            if (_lockedPositions.Contains(position) 
+                || _lockedPositions.Contains(endPositon)
+                || endPositon.X > 10
+                || endPositon.Y > 10)
                 return GeneratePosition(isVertical, shipSize);
 
             return position;

@@ -1,3 +1,5 @@
+using Core.Factories.AbstractFactories;
+using Core.Factories.ConrateFactories;
 using Core.Interfaces.Services;
 using Core.Services;
 
@@ -7,7 +9,10 @@ var service = builder.Services;
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
+service.AddControllers();
+
 service.AddScoped<IRandomPositionGeneratorService, RandomPositionGeneratorService>();
+service.AddScoped<IShipFactory, ShipFactory>();
 
 service.AddEndpointsApiExplorer();
 service.AddSwaggerGen();
@@ -22,5 +27,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors(x => x
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("http://localhost:4200"));
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
