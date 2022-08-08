@@ -1,31 +1,31 @@
 ﻿using Api.Bases;
-using Core.Dtos.AbstractDtos;
-using Core.Factories.AbstractFactories;
+using Core.Dtos.Ship;
+using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
     public class ShipGeneratorController : BaseApiController
     {
-        private readonly IShipFactory _shipFactory;
+        private readonly IShipGeneratorService _shipGeneratorService;
 
-        public ShipGeneratorController(IShipFactory shipFactory)
+        public ShipGeneratorController(IShipGeneratorService shipGeneratorService)
         {
-            _shipFactory = shipFactory;
+            _shipGeneratorService = shipGeneratorService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<IShipDto>>> GetGeneratedShip()
+        public async Task<ActionResult<IEnumerable<ShipInputDto>>> GetGeneratedShip()
         {
             return await Task.Run(() =>
             {
-                return Ok(new List<IShipDto>()
+                return Ok(new List<ShipInputDto>()
                 {
-                    _shipFactory.CreateCarrierDto(true),
-                    _shipFactory.CreateBattleshipDto(true),
-                    _shipFactory.CreateDestroyerDto(true),
-                    _shipFactory.CreateSubmarineDto(true),
-                    _shipFactory.CreatePatrolBoatDto(true),
+                    _shipGeneratorService.CreateCarrierDto(true),
+                    _shipGeneratorService.CreateBattleshipDto(true),
+                    _shipGeneratorService.CreateDestroyerDto(true),
+                    _shipGeneratorService.CreateSubmarineDto(true),
+                    _shipGeneratorService.CreatePatrolBoatDto(true),
                 });
             });
         }

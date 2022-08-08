@@ -1,5 +1,3 @@
-using Core.Factories.AbstractFactories;
-using Core.Factories.ConrateFactories;
 using Core.Interfaces.Services;
 using Core.Services;
 
@@ -12,7 +10,7 @@ var service = builder.Services;
 service.AddControllers();
 
 service.AddScoped<IRandomPositionGeneratorService, RandomPositionGeneratorService>();
-service.AddScoped<IShipFactory, ShipFactory>();
+service.AddScoped<IShipGeneratorService, ShipGeneratorService>();
 
 service.AddEndpointsApiExplorer();
 service.AddSwaggerGen();

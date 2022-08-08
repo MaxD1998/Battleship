@@ -1,9 +1,8 @@
-﻿using Core.Dtos.AbstractDtos;
-using Core.Dtos.Position;
+﻿using Core.Dtos.Position;
 
 namespace Core.Dtos.Ship
 {
-    public class ShipInputDto : IShipDto
+    public class ShipInputDto
     {
         public bool IsSunk => IsShipSunk();
 

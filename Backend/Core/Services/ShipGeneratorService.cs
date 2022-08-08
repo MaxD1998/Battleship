@@ -1,44 +1,40 @@
 ﻿using Core.Constants;
-using Core.Dtos.AbstractDtos;
 using Core.Dtos.Ship;
-using Core.Factories.AbstractFactories;
 using Core.Interfaces.Services;
 
-namespace Core.Factories.ConrateFactories
+namespace Core.Services
 {
-    public class ShipFactory : IShipFactory
+    public class ShipGeneratorService : IShipGeneratorService
     {
         private readonly IRandomPositionGeneratorService _rpgService;
 
-        public ShipFactory(IRandomPositionGeneratorService rpgService)
+        public ShipGeneratorService(IRandomPositionGeneratorService rpgService)
         {
             _rpgService = rpgService;
         }
 
-        public IShipDto CreateBattleshipDto(bool autoposition) =>
+        public ShipInputDto CreateBattleshipDto(bool autoposition) =>
             CreateShip("Battleship", ShipSizeConst.Battleship, autoposition);
 
-        public IShipDto CreateCarrierDto(bool autoposition) =>
+        public ShipInputDto CreateCarrierDto(bool autoposition) =>
             CreateShip("Carrier", ShipSizeConst.Carrier, autoposition);
 
-        public IShipDto CreateDestroyerDto(bool autoposition) =>
+        public ShipInputDto CreateDestroyerDto(bool autoposition) =>
             CreateShip("Destroyer", ShipSizeConst.Destroyer, autoposition);
 
-        public IShipDto CreatePatrolBoatDto(bool autoposition) =>
+        public ShipInputDto CreatePatrolBoatDto(bool autoposition) =>
             CreateShip("Patrol boat", ShipSizeConst.PatrolBoat, autoposition);
 
-        public IShipDto CreateSubmarineDto(bool autoposition) =>
+        public ShipInputDto CreateSubmarineDto(bool autoposition) =>
             CreateShip("Submarine", ShipSizeConst.Submarine, autoposition);
 
-        private IShipDto CreateShip(string name, int shipSize, bool autoposition)
+        private ShipInputDto CreateShip(string name, int shipSize, bool autoposition)
         {
-            var result = new ShipInputDto()
+            return new ShipInputDto()
             {
                 Name = name,
                 Positions = _rpgService.GeneratePositions(shipSize, autoposition)
             };
-
-            return result;
         }
     }
 }

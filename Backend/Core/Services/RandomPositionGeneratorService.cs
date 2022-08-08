@@ -9,7 +9,7 @@ namespace Core.Services
 
         public List<PositionDto> GeneratePositions(int shipSize, bool autoposition)
         {
-            var isVertical = Convert.ToBoolean(GenerateNumber(0, 1));
+            var isVertical = Convert.ToBoolean(GenerateNumber(0, 2));
             var positions = new List<PositionDto>();
             var position = GeneratePosition(isVertical, shipSize);
 
@@ -75,8 +75,8 @@ namespace Core.Services
         {
             return new PositionBaseDto()
             {
-                X = GenerateNumber(1, 10),
-                Y = GenerateNumber(1, 10),
+                X = GenerateNumber(1, 11),
+                Y = GenerateNumber(1, 11),
             };
         }
 
@@ -98,7 +98,7 @@ namespace Core.Services
             else
                 endPositon.X += decrementShipSize;
 
-            if (_lockedPositions.Contains(position) 
+            if (_lockedPositions.Contains(position)
                 || _lockedPositions.Contains(endPositon)
                 || endPositon.X > 10
                 || endPositon.Y > 10)
