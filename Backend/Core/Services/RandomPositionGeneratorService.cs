@@ -1,11 +1,12 @@
-﻿using Core.Dtos.Position;
+﻿using Core.Dtos.Bases;
+using Core.Dtos.Position;
 using Core.Interfaces.Services;
 
 namespace Core.Services
 {
     public class RandomPositionGeneratorService : IRandomPositionGeneratorService
     {
-        private List<PositionBaseDto> _lockedPositions = new();
+        private List<BasePositionDto> _lockedPositions = new();
 
         public List<PositionDto> GeneratePositions(int shipSize, bool autoposition)
         {
@@ -43,7 +44,7 @@ namespace Core.Services
             return positions;
         }
 
-        private void AddLockedPositions(IEnumerable<PositionBaseDto> positions)
+        private void AddLockedPositions(IEnumerable<BasePositionDto> positions)
         {
             foreach (var position in positions)
             {
@@ -56,7 +57,7 @@ namespace Core.Services
                 {
                     for (int j = y; j <= endY; j++)
                     {
-                        var lockedPosition = new PositionBaseDto()
+                        var lockedPosition = new BasePositionDto()
                         {
                             X = i,
                             Y = j,
@@ -71,9 +72,9 @@ namespace Core.Services
             }
         }
 
-        private PositionBaseDto CreatePosition()
+        private BasePositionDto CreatePosition()
         {
-            return new PositionBaseDto()
+            return new BasePositionDto()
             {
                 X = GenerateNumber(1, 11),
                 Y = GenerateNumber(1, 11),
@@ -87,7 +88,7 @@ namespace Core.Services
             return random.Next(start, end);
         }
 
-        private PositionBaseDto GeneratePosition(bool isVertical, int shipSize)
+        private BasePositionDto GeneratePosition(bool isVertical, int shipSize)
         {
             var position = CreatePosition();
             var decrementShipSize = shipSize - 1;
