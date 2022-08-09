@@ -1,5 +1,7 @@
 using Core.Interfaces.Services;
 using Core.Services;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var service = builder.Services;
@@ -8,6 +10,7 @@ var service = builder.Services;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 service.AddControllers();
+service.AddDbContext<DataContext>();
 
 service.AddScoped<IRandomPositionGeneratorService, RandomPositionGeneratorService>();
 service.AddScoped<IShipGeneratorService, ShipGeneratorService>();
@@ -38,5 +41,9 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
+var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetService<DataContext>();
+context.Database.Migrate();
 
 app.Run();
