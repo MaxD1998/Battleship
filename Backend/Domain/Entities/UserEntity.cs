@@ -1,17 +1,15 @@
 ﻿using Domain.Bases;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
+    [Table("User")]
     public class UserEntity : BaseEntity
     {
-        public List<AttackEntity> EnemyAttack { get; set; }
-
-        public List<ShipEntity> EnemyShips { get; set; }
-
-        public List<AttackEntity> MyAttack { get; set; }
-
-        public List<ShipEntity> MyShips { get; set; }
+        public List<AttackEntity> Attacks { get; set; }
 
         public string Name { get; set; }
+
+        public List<ShipEntity> Ships { get; set; }
     }
 }
