@@ -1,3 +1,4 @@
+using Api.Middlewares;
 using Core.Interfaces.Services;
 using Core.Services;
 using Infrastructure;
@@ -36,6 +37,8 @@ app.UseCors(x => x
     .AllowAnyMethod()
     .AllowCredentials()
     .WithOrigins("http://localhost:4200"));
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseEndpoints(endpoints =>
 {
