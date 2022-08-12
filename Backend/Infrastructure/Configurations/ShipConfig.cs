@@ -13,6 +13,8 @@ namespace Infrastructure.Configurations
             {
                 prop.WithOwner(x => x.Ship)
                     .HasForeignKey(x => x.ShipId);
+                prop.HasIndex(x => new { x.ShipId, x.X, x.Y })
+                    .IsUnique();
             });
             builder.SetProperty(x => x.IsSunk)
                 .HasDefaultValue(false);

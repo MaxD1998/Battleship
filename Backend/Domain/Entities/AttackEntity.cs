@@ -9,5 +9,7 @@ namespace Domain.Entities
         public bool IsComputerPlayer { get; set; }
 
         public UserEntity User { get; set; }
+
+        public int UserId { get; set; }
     }
 }
