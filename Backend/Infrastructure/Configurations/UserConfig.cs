@@ -13,7 +13,8 @@ namespace Infrastructure.Configurations
             {
                 prop.WithOwner(x => x.User)
                     .HasForeignKey(x => x.UserId);
-                prop.HasIndex(x => new { x.IsComputerPlayer, x.UserId, x.X, x.Y });
+                prop.HasIndex(x => new { x.IsComputerPlayer, x.UserId, x.X, x.Y })
+                    .IsUnique();
             });
             builder.SetProperty(x => x.Name, 25, true);
 

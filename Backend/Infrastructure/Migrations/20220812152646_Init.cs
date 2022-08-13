@@ -89,7 +89,8 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Attack_IsComputerPlayer_UserId_X_Y",
                 table: "Attack",
-                columns: new[] { "IsComputerPlayer", "UserId", "X", "Y" });
+                columns: new[] { "IsComputerPlayer", "UserId", "X", "Y" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Position_ShipId",

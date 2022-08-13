@@ -126,7 +126,8 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("UserId", "Id");
 
-                            b1.HasIndex("IsComputerPlayer", "UserId", "X", "Y");
+                            b1.HasIndex("IsComputerPlayer", "UserId", "X", "Y")
+                                .IsUnique();
 
                             b1.ToTable("Attack");
 

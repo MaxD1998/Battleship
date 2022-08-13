@@ -25,6 +25,31 @@ namespace Infrastructure.Repositories
             }
         }
 
+        public async Task<IEnumerable<T>> CreateRange<T>(IEnumerable<T> entities) where T : BaseEntity
+        {
+            using (var context = new DataContext())
+            {
+                await context.Set<T>()
+                    .AddRangeAsync(entities);
+
+                await context.SaveChangesAsync();
+
+                return entities;
+            }
+        }
+
+        public async Task Delete<T>(int id) where T : BaseEntity
+        {
+            using (var context = new DataContext())
+            {
+                var result = await context.Set<T>()
+                    .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+                context.Set<T>().Remove(result);
+                await context.SaveChangesAsync();
+            }
+        }
+
         public async Task<T> GetElement<T>(Expression<Func<T, bool>> expression,
             bool disableAutoInclude = false) where T : BaseEntity
         {

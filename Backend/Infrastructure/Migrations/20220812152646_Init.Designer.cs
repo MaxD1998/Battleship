@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220812055117_Init")]
+    [Migration("20220812152646_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,7 +128,8 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("UserId", "Id");
 
-                            b1.HasIndex("IsComputerPlayer", "UserId", "X", "Y");
+                            b1.HasIndex("IsComputerPlayer", "UserId", "X", "Y")
+                                .IsUnique();
 
                             b1.ToTable("Attack");
 

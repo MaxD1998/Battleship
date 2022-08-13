@@ -1,7 +1,11 @@
 using Api.Middlewares;
+using Core;
+using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Services;
 using Infrastructure;
+using Infrastructure.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +19,10 @@ service.AddDbContext<DataContext>();
 
 service.AddScoped<IRandomPositionGeneratorService, RandomPositionGeneratorService>();
 service.AddScoped<IShipGeneratorService, ShipGeneratorService>();
+service.AddScoped<IUnitOfWork, UnitOfWork>();
 
+service.AddMediatR(typeof(CoreAssembly).Assembly);
+service.AddAutoMapper(typeof(CoreAssembly).Assembly);
 service.AddEndpointsApiExplorer();
 service.AddSwaggerGen();
 
