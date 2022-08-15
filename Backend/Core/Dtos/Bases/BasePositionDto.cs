@@ -9,6 +9,9 @@
         public virtual bool Equals(BasePositionDto other) =>
             X == other.X && Y == other.Y;
 
+        public override int GetHashCode() =>
+            HashCode.Combine(X, Y);
+
         public virtual BasePositionDto ShallowCopy() =>
             (BasePositionDto)MemberwiseClone();
     }

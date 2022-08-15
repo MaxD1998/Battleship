@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Core.Services
 {
-    public class AutoShootService : IAutoShootService
+    public class AutoShootService : IShootService
     {
         private readonly IMediator _mediator;
         private readonly IRandomPositionGeneratorService _randomPosition;
@@ -18,16 +18,16 @@ namespace Core.Services
             _randomPosition = randomPosition;
         }
 
-        public async Task<UserDto> Shoot(int userId)
+        public async Task<UserDto> Shoot(int userId, int x = 0, int y = 0)
         {
             var user = await _mediator.Send(new GetUserByIdQuery(userId));
             var computerAttack = user.Attack.Where(x => x.IsComputerPlayer);
-            var userShips = user.Ships.Where(x => !x.IsComputerPlayer);
+            var userShips = user.Ships.Where(x => !x.IsComputerPlayer && !x.IsSunk);
             var userShipPositions = userShips.SelectMany(x => x.Positions);
 
-            if (userShipPositions.Any(x => x.IsHit && !x.IsHit))
+            if (userShipPositions.Any(x => x.IsHit))
             {
-                var damagedShip = userShips.FirstOrDefault(x => x.Positions.Any(x => x.IsHit && !x.IsHit));
+                var damagedShip = userShips.FirstOrDefault(x => x.Positions.Any(x => x.IsHit));
                 var damagedShipPositions = damagedShip?.Positions.Where(x => x.IsHit);
 
                 if (damagedShipPositions.Count() > 1)
@@ -36,8 +36,17 @@ namespace Core.Services
                     attackPosition.IsHit = true;
                     user.Attack.Add(AttackDto.CopyTo(attackPosition));
 
-                    if (damagedShipPositions.All(x => x.IsHit))
-                        _randomPosition.AddLockedPositions(damagedShip.Positions, user.Attack);
+                    if (damagedShip.Positions.All(x => x.IsHit))
+                    {
+                        var lockedPositions = new List<AttackDto>();
+
+                        _randomPosition.AddLockedPositions(damagedShip.Positions, lockedPositions);
+                        lockedPositions.ForEach(x => x.IsComputerPlayer = true);
+
+                        var exceptLockedPositions = lockedPositions.Except(user.Attack);
+
+                        user.Attack.AddRange(exceptLockedPositions);
+                    }
 
                     return await _mediator.Send(new UpdateUserCommand(userId, user));
                 }

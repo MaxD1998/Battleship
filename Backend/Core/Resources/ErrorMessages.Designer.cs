@@ -68,5 +68,14 @@ namespace Core.Resources {
                 return ResourceManager.GetString("NoDataToUpdate", resourceCulture);
             }
         }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu This field was attacked.
+        /// </summary>
+        public static string ThisFieldWasAttacked {
+            get {
+                return ResourceManager.GetString("ThisFieldWasAttacked", resourceCulture);
+            }
+        }
     }
 }

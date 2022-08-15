@@ -2,7 +2,7 @@
 
 namespace Core.Dtos.Attack
 {
-    public class AttackDto : BasePositionDto
+    public class AttackDto : BasePositionDto, IEquatable<AttackDto>
     {
         public int Id { get; set; }
 
@@ -14,5 +14,10 @@ namespace Core.Dtos.Attack
                 X = dto.X,
                 Y = dto.Y
             };
+
+        public bool Equals(AttackDto other) =>
+            X == other.X && Y == other.Y && IsComputerPlayer == other.IsComputerPlayer;
+
+        public override int GetHashCode() => HashCode.Combine(X, Y, IsComputerPlayer);
     }
 }

@@ -4,7 +4,7 @@ namespace Core.Dtos.Ship
 {
     public class ShipInputDto
     {
-        public bool IsComputerPlayer { get; set; }
+        public bool IsComputerPlayer { get; set; } = true;
 
         public bool IsSunk => IsShipSunk();
 

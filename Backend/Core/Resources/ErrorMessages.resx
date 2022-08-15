@@ -120,4 +120,7 @@
   <data name="NoDataToUpdate" xml:space="preserve">
     <value>No data to update</value>
   </data>
+  <data name="ThisFieldWasAttacked" xml:space="preserve">
+    <value>This field was attacked</value>
+  </data>
 </root>
