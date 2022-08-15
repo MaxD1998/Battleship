@@ -17,6 +17,7 @@ var service = builder.Services;
 service.AddControllers();
 service.AddDbContext<DataContext>();
 
+service.AddScoped<IAutoShootService, AutoShootService>();
 service.AddScoped<IRandomPositionGeneratorService, RandomPositionGeneratorService>();
 service.AddScoped<IShipGeneratorService, ShipGeneratorService>();
 service.AddScoped<IUnitOfWork, UnitOfWork>();

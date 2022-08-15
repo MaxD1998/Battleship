@@ -10,6 +10,8 @@ namespace Domain.Entities
 
         public bool IsSunk { get; set; }
 
+        public bool IsVertical { get; set; }
+
         public string Name { get; set; }
 
         public List<PositionEntity> Positions { get; set; }

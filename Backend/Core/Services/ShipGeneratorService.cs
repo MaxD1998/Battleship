@@ -30,10 +30,13 @@ namespace Core.Services
 
         private ShipInputDto CreateShip(string name, int shipSize, bool autoposition)
         {
+            var isVertical = Convert.ToBoolean(_rpgService.GenerateNumber(0, 2));
+
             return new ShipInputDto()
             {
+                IsVertical = isVertical,
                 Name = name,
-                Positions = _rpgService.GeneratePositions(shipSize, autoposition)
+                Positions = _rpgService.GenerateShipPositions(shipSize, autoposition, isVertical)
             };
         }
     }

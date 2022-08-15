@@ -1,4 +1,5 @@
-﻿using Core.Dtos.Bases;
+﻿using Core.Dtos.Attack;
+using Core.Dtos.Bases;
 using Core.Dtos.Position;
 using Core.Interfaces.Services;
 
@@ -8,9 +9,43 @@ namespace Core.Services
     {
         private List<BasePositionDto> _lockedPositions = new();
 
-        public List<PositionDto> GeneratePositions(int shipSize, bool autoposition)
+        public void AddLockedPositions<T>(IEnumerable<BasePositionDto> positions, List<T> lockedPositions) where T : BasePositionDto, new()
         {
-            var isVertical = Convert.ToBoolean(GenerateNumber(0, 2));
+            foreach (var position in positions)
+            {
+                var x = position.X - 1 > 0 ? position.X - 1 : position.X;
+                var y = position.Y - 1 > 0 ? position.Y - 1 : position.Y;
+                var endX = position.X + 1 > 10 ? position.X : position.X + 1;
+                var endY = position.Y + 1 > 10 ? position.Y : position.Y + 1;
+
+                for (int i = x; i <= endX; i++)
+                {
+                    for (int j = y; j <= endY; j++)
+                    {
+                        var lockedPosition = new T()
+                        {
+                            X = i,
+                            Y = j,
+                        };
+
+                        if (lockedPositions.Contains(lockedPosition))
+                            continue;
+
+                        lockedPositions.Add(lockedPosition);
+                    }
+                }
+            }
+        }
+
+        public int GenerateNumber(int start, int end)
+        {
+            var random = new Random();
+
+            return random.Next(start, end);
+        }
+
+        public List<PositionDto> GenerateShipPositions(int shipSize, bool autoposition, bool isVertical)
+        {
             var positions = new List<PositionDto>();
             var position = GeneratePosition(isVertical, shipSize);
 
@@ -39,37 +74,19 @@ namespace Core.Services
                     });
             }
 
-            AddLockedPositions(positions);
+            AddLockedPositions(positions, _lockedPositions);
 
             return positions;
         }
 
-        private void AddLockedPositions(IEnumerable<BasePositionDto> positions)
+        public BasePositionDto GenerateShootPosition(IEnumerable<AttackDto> positions)
         {
-            foreach (var position in positions)
-            {
-                var x = position.X - 1 > 0 ? position.X - 1 : position.X;
-                var y = position.Y - 1 > 0 ? position.Y - 1 : position.Y;
-                var endX = position.X + 1 > 10 ? position.X : position.X + 1;
-                var endY = position.Y + 1 > 10 ? position.Y : position.Y + 1;
+            var position = CreatePosition();
 
-                for (int i = x; i <= endX; i++)
-                {
-                    for (int j = y; j <= endY; j++)
-                    {
-                        var lockedPosition = new BasePositionDto()
-                        {
-                            X = i,
-                            Y = j,
-                        };
+            if (positions.Contains(position))
+                return GenerateShootPosition(positions);
 
-                        if (_lockedPositions.Contains(lockedPosition))
-                            continue;
-
-                        _lockedPositions.Add(lockedPosition);
-                    }
-                }
-            }
+            return position;
         }
 
         private BasePositionDto CreatePosition()
@@ -79,13 +96,6 @@ namespace Core.Services
                 X = GenerateNumber(1, 11),
                 Y = GenerateNumber(1, 11),
             };
-        }
-
-        private int GenerateNumber(int start, int end)
-        {
-            var random = new Random();
-
-            return random.Next(start, end);
         }
 
         private BasePositionDto GeneratePosition(bool isVertical, int shipSize)
