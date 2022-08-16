@@ -77,5 +77,14 @@ namespace Core.Resources {
                 return ResourceManager.GetString("ThisFieldWasAttacked", resourceCulture);
             }
         }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Value cannot be null.
+        /// </summary>
+        public static string ValueCannotBeNull {
+            get {
+                return ResourceManager.GetString("ValueCannotBeNull", resourceCulture);
+            }
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace Infrastructure.Configurations
         {
             builder.OwnsMany(x => x.Attacks, prop =>
             {
+                prop.HasKey(x => x.Id);
                 prop.WithOwner(x => x.User)
                     .HasForeignKey(x => x.UserId);
                 prop.HasIndex(x => new { x.IsComputerPlayer, x.UserId, x.X, x.Y })
@@ -18,6 +19,8 @@ namespace Infrastructure.Configurations
             });
             builder.SetProperty(x => x.Name, 25, true);
 
+            builder.Navigation(x => x.Attacks)
+                .AutoInclude();
             builder.Navigation(x => x.Ships)
                 .AutoInclude();
         }

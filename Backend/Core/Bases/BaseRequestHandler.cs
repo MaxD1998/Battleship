@@ -7,8 +7,8 @@ namespace Core.Bases
 {
     public abstract class BaseRequestHandler
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
+        protected readonly IMapper _mapper;
+        protected readonly IUnitOfWork _unitOfWork;
 
         public BaseRequestHandler(IMapper mapper, IUnitOfWork unitOfWork)
         {

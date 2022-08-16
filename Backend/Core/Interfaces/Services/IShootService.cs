@@ -1,9 +1,10 @@
-﻿using Core.Dtos.User;
+﻿using Core.Dtos.Bases;
+using Core.Dtos.User;
 
 namespace Core.Interfaces.Services
 {
     public interface IShootService
     {
-        Task<UserDto> Shoot(int userId, int x = 0, int y = 0);
+        Task<UserDto> Shoot(int userId, BasePositionDto position = null);
     }
 }

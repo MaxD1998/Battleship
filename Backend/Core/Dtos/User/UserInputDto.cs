@@ -5,10 +5,10 @@ namespace Core.Dtos.User
 {
     public class UserInputDto
     {
-        public List<AttackDto> Attack { get; set; }
+        public List<AttackDto> Attacks { get; set; } = new();
 
         public string Name { get; set; }
 
-        public List<ShipDto> Ships { get; set; }
+        public List<ShipDto> Ships { get; set; } = new();
     }
 }

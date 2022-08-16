@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Dtos.Attack;
+using Core.Dtos.Bases;
 using Core.Dtos.Position;
 using Core.Dtos.Ship;
 using Core.Dtos.User;
@@ -11,6 +12,7 @@ namespace Core.Mappings
     {
         public MapProfile()
         {
+            CreateMap<AttackEntity, BasePositionDto>().ReverseMap();
             CreateMap<AttackEntity, AttackDto>().ReverseMap();
             CreateMap<PositionEntity, PositionDto>().ReverseMap();
             CreateMap<ShipEntity, ShipDto>().ReverseMap();

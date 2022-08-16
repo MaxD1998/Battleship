@@ -37,6 +37,11 @@ namespace Core.Services
             }
         }
 
+        public void ClearLockedLocation()
+        {
+            _lockedPositions.Clear();
+        }
+
         public int GenerateNumber(int start, int end)
         {
             var random = new Random();
@@ -44,13 +49,10 @@ namespace Core.Services
             return random.Next(start, end);
         }
 
-        public List<PositionDto> GenerateShipPositions(int shipSize, bool autoposition, bool isVertical)
+        public List<PositionDto> GenerateShipPositions(int shipSize, bool isVertical)
         {
             var positions = new List<PositionDto>();
             var position = GeneratePosition(isVertical, shipSize);
-
-            if (!autoposition)
-                return positions;
 
             positions.Add(new PositionDto()
             {

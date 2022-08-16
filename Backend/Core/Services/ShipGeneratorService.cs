@@ -13,31 +13,48 @@ namespace Core.Services
             _rpgService = rpgService;
         }
 
-        public ShipInputDto CreateBattleshipDto(bool autoposition) =>
-            CreateShip("Battleship", ShipSizeConst.Battleship, autoposition);
+        public List<ShipDto> CreateFleet(bool isConmputer)
+        {
+            var result = new List<ShipDto>()
+            {
+                CreateCarrierDto(isConmputer),
+                CreateBattleshipDto(isConmputer),
+                CreateDestroyerDto(isConmputer),
+                CreateSubmarineDto(isConmputer),
+                CreatePatrolBoatDto(isConmputer),
+            };
 
-        public ShipInputDto CreateCarrierDto(bool autoposition) =>
-            CreateShip("Carrier", ShipSizeConst.Carrier, autoposition);
+            _rpgService.ClearLockedLocation();
 
-        public ShipInputDto CreateDestroyerDto(bool autoposition) =>
-            CreateShip("Destroyer", ShipSizeConst.Destroyer, autoposition);
+            return result;
+        }
 
-        public ShipInputDto CreatePatrolBoatDto(bool autoposition) =>
-            CreateShip("Patrol boat", ShipSizeConst.PatrolBoat, autoposition);
+        private ShipDto CreateBattleshipDto(bool isComputer) =>
+                            CreateShip("Battleship", ShipSizeConst.Battleship, isComputer);
 
-        public ShipInputDto CreateSubmarineDto(bool autoposition) =>
-            CreateShip("Submarine", ShipSizeConst.Submarine, autoposition);
+        private ShipDto CreateCarrierDto(bool isComputer) =>
+            CreateShip("Carrier", ShipSizeConst.Carrier, isComputer);
 
-        private ShipInputDto CreateShip(string name, int shipSize, bool autoposition)
+        private ShipDto CreateDestroyerDto(bool isComputer) =>
+            CreateShip("Destroyer", ShipSizeConst.Destroyer, isComputer);
+
+        private ShipDto CreatePatrolBoatDto(bool isComputer) =>
+            CreateShip("Patrol boat", ShipSizeConst.PatrolBoat, isComputer);
+
+        private ShipDto CreateShip(string name, int shipSize, bool isComputer)
         {
             var isVertical = Convert.ToBoolean(_rpgService.GenerateNumber(0, 2));
 
-            return new ShipInputDto()
+            return new ShipDto()
             {
+                IsComputerPlayer = isComputer,
                 IsVertical = isVertical,
                 Name = name,
-                Positions = _rpgService.GenerateShipPositions(shipSize, autoposition, isVertical)
+                Positions = _rpgService.GenerateShipPositions(shipSize, isVertical)
             };
         }
+
+        private ShipDto CreateSubmarineDto(bool isComputer) =>
+                    CreateShip("Submarine", ShipSizeConst.Submarine, isComputer);
     }
 }

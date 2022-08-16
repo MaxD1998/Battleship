@@ -1,4 +1,5 @@
 ﻿using Core.Dtos.Attack;
+using Core.Dtos.Bases;
 using Core.Dtos.User;
 using Core.Features.Get.User;
 using Core.Features.Update;
@@ -18,10 +19,10 @@ namespace Core.Services
             _randomPosition = randomPosition;
         }
 
-        public async Task<UserDto> Shoot(int userId, int x = 0, int y = 0)
+        public async Task<UserDto> Shoot(int userId, BasePositionDto position = null)
         {
             var user = await _mediator.Send(new GetUserByIdQuery(userId));
-            var computerAttack = user.Attack.Where(x => x.IsComputerPlayer);
+            var computerAttack = user.Attacks.Where(x => x.IsComputerPlayer);
             var userShips = user.Ships.Where(x => !x.IsComputerPlayer && !x.IsSunk);
             var userShipPositions = userShips.SelectMany(x => x.Positions);
 
@@ -34,7 +35,7 @@ namespace Core.Services
                 {
                     var attackPosition = damagedShip.Positions.FirstOrDefault(x => !x.IsHit);
                     attackPosition.IsHit = true;
-                    user.Attack.Add(AttackDto.CopyTo(attackPosition));
+                    user.Attacks.Add(AttackDto.CopyTo(attackPosition));
 
                     if (damagedShip.Positions.All(x => x.IsHit))
                     {
@@ -43,9 +44,9 @@ namespace Core.Services
                         _randomPosition.AddLockedPositions(damagedShip.Positions, lockedPositions);
                         lockedPositions.ForEach(x => x.IsComputerPlayer = true);
 
-                        var exceptLockedPositions = lockedPositions.Except(user.Attack);
+                        var exceptLockedPositions = lockedPositions.Except(user.Attacks);
 
-                        user.Attack.AddRange(exceptLockedPositions);
+                        user.Attacks.AddRange(exceptLockedPositions);
                     }
 
                     return await _mediator.Send(new UpdateUserCommand(userId, user));
@@ -53,7 +54,7 @@ namespace Core.Services
             }
 
             var attack = _randomPosition.GenerateShootPosition(computerAttack);
-            user.Attack.Add(AttackDto.CopyTo(attack));
+            user.Attacks.Add(AttackDto.CopyTo(attack));
 
             return await _mediator.Send(new UpdateUserCommand(userId, user));
         }

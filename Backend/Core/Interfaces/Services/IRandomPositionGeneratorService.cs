@@ -8,9 +8,11 @@ namespace Core.Interfaces.Services
     {
         void AddLockedPositions<T>(IEnumerable<BasePositionDto> positions, List<T> lockedPositions) where T : BasePositionDto, new();
 
+        void ClearLockedLocation();
+
         int GenerateNumber(int start, int end);
 
-        List<PositionDto> GenerateShipPositions(int shipSize, bool autoPosition, bool isVertical);
+        List<PositionDto> GenerateShipPositions(int shipSize, bool isVertical);
 
         BasePositionDto GenerateShootPosition(IEnumerable<AttackDto> positions);
     }

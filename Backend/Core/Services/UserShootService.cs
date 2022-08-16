@@ -21,15 +21,13 @@ namespace Core.Services
             _randomPosition = randomPosition;
         }
 
-        public async Task<UserDto> Shoot(int userId, int x = 0, int y = 0)
+        public async Task<UserDto> Shoot(int userId, BasePositionDto position = null)
         {
             var user = await _mediator.Send(new GetUserByIdQuery(userId));
-            var userAttacks = user?.Attack.Where(x => !x.IsComputerPlayer);
-            var position = new BasePositionDto()
-            {
-                X = x,
-                Y = y,
-            };
+            var userAttacks = user?.Attacks.Where(x => !x.IsComputerPlayer);
+
+            if (position is null)
+                throw new BadRequestException(ErrorMessages.ValueCannotBeNull);
 
             if (userAttacks.Contains(position))
                 throw new BadRequestException(ErrorMessages.ThisFieldWasAttacked);
@@ -51,13 +49,15 @@ namespace Core.Services
                     _randomPosition.AddLockedPositions(computerShip.Positions, lockedPositions);
                     lockedPositions.ForEach(x => x.IsComputerPlayer = false);
 
-                    var exceptLockedPositions = lockedPositions.Except(user.Attack);
+                    var exceptLockedPositions = lockedPositions.Except(user.Attacks);
 
-                    user.Attack.AddRange(exceptLockedPositions);
+                    user.Attacks.AddRange(exceptLockedPositions);
                 }
             }
 
-            user.Attack.Add(AttackDto.CopyTo(position));
+            var userAttack = AttackDto.CopyTo(position);
+            userAttack.IsComputerPlayer = false;
+            user.Attacks.Add(userAttack);
 
             return await _mediator.Send(new UpdateUserCommand(userId, user));
         }

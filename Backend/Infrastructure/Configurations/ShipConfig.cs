@@ -20,6 +20,9 @@ namespace Infrastructure.Configurations
                 .HasDefaultValue(false);
             builder.HasIndex(x => new { x.UserId, x.Name, x.IsComputerPlayer })
                 .IsUnique();
+
+            builder.Navigation(x => x.Positions)
+                .AutoInclude();
         }
     }
 }

@@ -17,10 +17,13 @@ var service = builder.Services;
 service.AddControllers();
 service.AddDbContext<DataContext>();
 
-service.AddScoped<IShootService, AutoShootService>();
-service.AddScoped<IShootService, UserShootService>();
+service.AddScoped<ErrorHandlingMiddleware>();
+
+service.AddScoped<IGameService, GameService>();
 service.AddScoped<IRandomPositionGeneratorService, RandomPositionGeneratorService>();
 service.AddScoped<IShipGeneratorService, ShipGeneratorService>();
+service.AddScoped<IShootService, AutoShootService>();
+service.AddScoped<IShootService, UserShootService>();
 service.AddScoped<IUnitOfWork, UnitOfWork>();
 
 service.AddMediatR(typeof(CoreAssembly).Assembly);

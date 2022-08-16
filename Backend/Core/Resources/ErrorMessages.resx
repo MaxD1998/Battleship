@@ -123,4 +123,7 @@
   <data name="ThisFieldWasAttacked" xml:space="preserve">
     <value>This field was attacked</value>
   </data>
+  <data name="ValueCannotBeNull" xml:space="preserve">
+    <value>Value cannot be null</value>
+  </data>
 </root>

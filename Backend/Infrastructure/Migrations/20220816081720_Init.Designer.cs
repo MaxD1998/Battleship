@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220812152646_Init")]
+    [Migration("20220816081720_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,6 +53,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsSunk")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsVertical")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -110,14 +113,14 @@ namespace Infrastructure.Migrations
                 {
                     b.OwnsMany("Domain.Entities.AttackEntity", "Attacks", b1 =>
                         {
-                            b1.Property<int>("UserId")
-                                .HasColumnType("INTEGER");
-
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("INTEGER");
 
                             b1.Property<bool>("IsComputerPlayer")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("UserId")
                                 .HasColumnType("INTEGER");
 
                             b1.Property<int>("X")
@@ -126,7 +129,9 @@ namespace Infrastructure.Migrations
                             b1.Property<int>("Y")
                                 .HasColumnType("INTEGER");
 
-                            b1.HasKey("UserId", "Id");
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("UserId");
 
                             b1.HasIndex("IsComputerPlayer", "UserId", "X", "Y")
                                 .IsUnique();

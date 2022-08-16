@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Dtos.Bases;
+using Core.Dtos.User;
 
 namespace Core.Interfaces.Services
 {
     public interface IGameService
     {
+        Task<UserDto> NextTurn(int userId, BasePositionDto dto);
 
+        Task<UserDto> Start(string name);
     }
 }

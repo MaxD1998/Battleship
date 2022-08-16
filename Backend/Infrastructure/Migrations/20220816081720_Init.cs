@@ -25,15 +25,16 @@ namespace Infrastructure.Migrations
                 name: "Attack",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     IsComputerPlayer = table.Column<bool>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     X = table.Column<int>(type: "INTEGER", nullable: false),
                     Y = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attack", x => new { x.UserId, x.Id });
+                    table.PrimaryKey("PK_Attack", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Attack_User_UserId",
                         column: x => x.UserId,
@@ -50,6 +51,7 @@ namespace Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     IsComputerPlayer = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsSunk = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsVertical = table.Column<bool>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -91,6 +93,11 @@ namespace Infrastructure.Migrations
                 table: "Attack",
                 columns: new[] { "IsComputerPlayer", "UserId", "X", "Y" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attack_UserId",
+                table: "Attack",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Position_ShipId",
